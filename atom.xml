@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-21T01:37:15.974Z</updated>
+  <updated>2020-04-21T03:02:36.122Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java reflect</title>
+    <link href="http://yoursite.com/2020/04/21/java-reflect/"/>
+    <id>http://yoursite.com/2020/04/21/java-reflect/</id>
+    <published>2020-04-21T03:01:36.000Z</published>
+    <updated>2020-04-21T03:02:36.122Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;反射是框架设计的灵魂&lt;br&gt;（使用的前提条件：必须先得到代表的字节码的Class，Class类用于表示.class文件（字节码））&lt;/p&gt;
+&lt;p&gt;一、反射的概述&lt;br&gt;JAVA反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；对于任意一个对象，都能够
+        
+      
+    
+    </summary>
+    
+    
+    
+      <category term="java" scheme="http://yoursite.com/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>My New Post</title>
@@ -36,7 +62,7 @@
     <link href="http://yoursite.com/2020/04/21/Demo-test/"/>
     <id>http://yoursite.com/2020/04/21/Demo-test/</id>
     <published>2020-04-21T01:35:53.000Z</published>
-    <updated>2020-04-21T01:44:35.123Z</updated>
+    <updated>2020-04-21T02:59:13.079Z</updated>
     
     <summary type="html">
     
@@ -44,7 +70,10 @@
       
         
         
-          &lt;p&gt;这是一次demo test for hexo
+          &lt;p&gt;这是一次demo test for hexo blog&lt;/p&gt;
+&lt;p&gt;通用修饰器&lt;br&gt;对每个类型都有一个修饰器形式，怎么记得下来？所以就有了这个”万能修饰器”:&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;def w_test(func):
+    def inner(*args,
         
       
     
