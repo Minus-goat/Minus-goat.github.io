@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/video.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/video.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="多线程," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="yangli" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="1.线程与进程：在开始之前先把进程与线程进行区分一下，一个程序最少需要一个进程，而一个进程最少需要一个线程。关系是线程–&gt;进程–&gt;程序的大致组成结构。所以线程是程序执行流的最小单位，而进程是系统进行资源分配和调度的一个独立单位。以下我们所有讨论的都是建立在线程基础之上。 2. Thread的几个重要方法：start()方法，调用该方法开始执行该线程；stop()方法，调用该方法强制结束">
+<meta property="og:type" content="article">
+<meta property="og:title" content="java多线程">
+<meta property="og:url" content="http://yoursite.com/2020/04/21/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/index.html">
+<meta property="og:site_name" content="yangli">
+<meta property="og:description" content="1.线程与进程：在开始之前先把进程与线程进行区分一下，一个程序最少需要一个进程，而一个进程最少需要一个线程。关系是线程–&gt;进程–&gt;程序的大致组成结构。所以线程是程序执行流的最小单位，而进程是系统进行资源分配和调度的一个独立单位。以下我们所有讨论的都是建立在线程基础之上。 2. Thread的几个重要方法：start()方法，调用该方法开始执行该线程；stop()方法，调用该方法强制结束">
+<meta property="article:published_time" content="2020-04-21T04:50:22.000Z">
+<meta property="article:modified_time" content="2020-04-21T04:51:31.231Z">
+<meta property="article:author" content="yang li">
+<meta property="article:tag" content="多线程">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/04/21/java多线程/"/>
+
+
+
+
+
+  <title>java多线程 | yangli</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">yangli</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+        <li class="menu-item menu-item-search">
+          
+            <a href="javascript:;" class="popup-trigger">
+          
+            
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />
+            
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  
+
+  
+    <div class="site-search">
+      
+  <div class="popup search-popup local-search-popup">
+  <div class="local-search-header clearfix">
+    <span class="search-icon">
+      <i class="fa fa-search"></i>
+    </span>
+    <span class="popup-btn-close">
+      <i class="fa fa-times-circle"></i>
+    </span>
+    <div class="local-search-input-wrapper">
+      <input autocomplete="off"
+             placeholder="搜索..." spellcheck="false"
+             type="text" id="local-search-input">
+    </div>
+  </div>
+  <div id="local-search-result"></div>
+</div>
+
+
+
+    </div>
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/21/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="yang li">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/hope.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="yangli">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">java多线程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-21T12:50:22+08:00">
+                2020-04-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-线程与进程："><a href="#1-线程与进程：" class="headerlink" title="1.线程与进程："></a>1.线程与进程：</h2><p>在开始之前先把进程与线程进行区分一下，一个程序最少需要一个进程，而一个进程最少需要一个线程。关系是线程–&gt;进程–&gt;程序的大致组成结构。所以线程是程序执行流的最小单位，而进程是系统进行资源分配和调度的一个独立单位。以下我们所有讨论的都是建立在线程基础之上。</p>
+<h2 id="2-Thread的几个重要方法："><a href="#2-Thread的几个重要方法：" class="headerlink" title="2. Thread的几个重要方法："></a>2. Thread的几个重要方法：</h2><p>start()方法，调用该方法开始执行该线程；<br>stop()方法，调用该方法强制结束该线程执行；<br>join方法，调用该方法等待该线程结束。<br>sleep()方法，调用该方法该线程进入等待。<br>run()方法，调用该方法直接执行线程的run()方法，但是线程调用start()方法时也会运行run()方法，区别就是一个是由线程调度运行run()方法，一个是直接调用了线程中的run()方法！！<br>3. 那wait()和notify()呢？<br>要注意，其实wait()与notify()方法是Object的方法，不是Thread的方法！！同时，wait()与notify()会配合使用，分别表示线程挂起和线程恢复。</p>
+<ol start="4">
+<li>wait()与sleep()的区别，简单来说wait()会释放对象锁而sleep()不会释放对象锁。</li>
+<li>线程状态：</li>
+</ol>
+<h2 id="线程总共有5大状态"><a href="#线程总共有5大状态" class="headerlink" title="线程总共有5大状态:"></a>线程总共有5大状态:</h2><p>新建状态：新建线程对象，并没有调用start()方法之前<br>就绪状态：调用start()方法之后线程就进入就绪状态，但是并不是说只要调用start()方法线程就马上变为当前线程，在变为当前线程之前都是为就绪状态。值得一提的是，线程在睡眠和挂起中恢复的时候也会进入就绪状态哦。<br>运行状态：线程被设置为当前线程，开始执行run()方法。就是线程进入运行状态<br>阻塞状态：线程被暂停，比如说调用sleep()方法后线程就进入阻塞状态<br>死亡状态：线程执行结束</p>
+<h2 id="6-锁类型"><a href="#6-锁类型" class="headerlink" title="6. 锁类型"></a>6. 锁类型</h2><p>可重入锁：在执行对象中所有同步方法不用再次获得锁<br>可中断锁：在等待获取锁过程中可中断<br>公平锁： 按等待获取锁的线程的等待时间进行获取，等待时间长的具有优先获取锁权利<br>读写锁：对资源读取和写入的时候拆分为2部分处理，读的时候可以多线程一起读，写的时候必须同步地写<br>synchronized与Lock的区别<br>我把两者的区别分类到了一个表中，方便大家对比：</p>
+<p>synchronized的缺陷<br>synchronized是java中的一个关键字，也就是说是Java语言内置的特性。那么为什么会出现Lock呢？<br>　　在上面一篇文章中，我们了解到如果一个代码块被synchronized修饰了，当一个线程获取了对应的锁，并执行该代码块时，其他线程便只能一直等待，等待获取锁的线程释放锁，而这里获取锁的线程释放锁只会有两种情况：<br>　　1）获取锁的线程执行完了该代码块，然后线程释放对锁的占有；<br>　　2）线程执行发生异常，此时JVM会让线程自动释放锁。</p>
+<p>那么如果这个获取锁的线程由于要等待IO或者其他原因（比如调用sleep方法）被阻塞了，但是又没有释放锁，其他线程便只能干巴巴地等待，试想一下，这多么影响程序执行效率。<br>　　因此就需要有一种机制可以不让等待的线程一直无期限地等待下去（比如只等待一定的时间或者能够响应中断），通过Lock就可以办到。<br>　　再举个例子：当有多个线程读写文件时，读操作和写操作会发生冲突现象，写操作和写操作会发生冲突现象，但是读操作和读操作不会发生冲突现象。</p>
+<p>但是采用synchronized关键字来实现同步的话，就会导致一个问题：<br>　　如果多个线程都只是进行读操作，所以当一个线程在进行读操作时，其他线程只能等待无法进行读操作。<br>　　因此就需要一种机制来使得多个线程都只是进行读操作时，线程之间不会发生冲突，通过Lock就可以办到。<br>　　另外，通过Lock可以知道线程有没有成功获取到锁。这个是synchronized无法办到的。</p>
+<p>总结一下，也就是说Lock提供了比synchronized更多的功能。但是要注意以下几点：<br>　　1）Lock不是Java语言内置的，synchronized是Java语言的关键字，因此是内置特性。Lock是一个类，通过这个类可以实现同步访问；<br>　　2）Lock和synchronized有一点非常大的不同，采用synchronized不需要用户去手动释放锁，当synchronized方法或者synchronized代码块执行完之后，系统会自动让线程释放对锁的占用；而Lock则必须要用户去手动释放锁，如果没有主动释放锁，就有可能导致出现死锁现象。</p>
+<p>java.util.concurrent.locks包下常用的类<br>下面我们就来探讨一下java.util.concurrent.locks包中常用的类和接口。</p>
+<h3 id="1-Lock"><a href="#1-Lock" class="headerlink" title="1.Lock"></a>1.Lock</h3><p>首先要说明的就是Lock，通过查看Lock的源码可知，Lock是一个接口：</p>
+<p>public interface Lock {<br>    void lock();<br>    void lockInterruptibly() throws InterruptedException;<br>    boolean tryLock();<br>    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;<br>    void unlock();<br>    Condition newCondition();<br>}<br>下面来逐个讲述Lock接口中每个方法的使用:<br>　　 lock()、tryLock()、tryLock(long time, TimeUnit unit)和lockInterruptibly()是用来获取锁的。<br>　　unLock()方法是用来释放锁的。<br>　　newCondition()这个方法暂且不在此讲述，会在后面的线程协作一文中讲述。</p>
+<p>在Lock中声明了四个方法来获取锁，那么这四个方法有何区别呢？<br>　　首先lock()方法是平常使用得最多的一个方法，就是用来获取锁。如果锁已被其他线程获取，则进行等待。<br>　　由于在前面讲到如果采用Lock，必须主动去释放锁，并且在发生异常时，不会自动释放锁。因此一般来说，使用Lock必须在try{}catch{}块中进行，并且将释放锁的操作放在finally块中进行，以保证锁一定被被释放，防止死锁的发生。通常使用Lock来进行同步的话，是以下面这种形式去使用的：</p>
+<p>Lock lock = …;<br>lock.lock();<br>try{<br>    //处理任务<br>}catch(Exception ex){</p>
+<p>}finally{<br>    lock.unlock();   //释放锁<br>}<br>tryLock()方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。<br>tryLock(long time, TimeUnit unit)方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。<br>所以，一般情况下通过tryLock来获取锁时是这样使用的：</p>
+<p>Lock lock = …;<br>if(lock.tryLock()) {<br>     try{<br>         //处理任务<br>     }catch(Exception ex){</p>
+<pre><code>}finally{
+    lock.unlock();   //释放锁
+} </code></pre><p>}else {<br>    //如果不能获取锁，则直接做其他事情<br>}<br>lockInterruptibly()方法比较特殊，当通过这个方法去获取锁时，如果线程正在等待获取锁，则这个线程能够响应中断，即中断线程的等待状态。也就使说，当两个线程同时通过lock.lockInterruptibly()想获取某个锁时，假若此时线程A获取到了锁，而线程B只有在等待，那么对线程B调用threadB.interrupt()方法能够中断线程B的等待过程。</p>
+<p>由于lockInterruptibly()的声明中抛出了异常，所以lock.lockInterruptibly()必须放在try块中或者在调用lockInterruptibly()的方法外声明抛出InterruptedException。</p>
+<p>因此lockInterruptibly()一般的使用形式如下：</p>
+<p>public void method() throws InterruptedException {<br>    lock.lockInterruptibly();<br>    try {<br>     //…..<br>    }<br>    finally {<br>        lock.unlock();<br>    }<br>}<br>注意，当一个线程获取了锁之后，是不会被interrupt()方法中断的。单独调用interrupt()方法不能中断正在运行过程中的线程，只能中断阻塞过程中的线程。</p>
+<p>因此当通过lockInterruptibly()方法获取某个锁时，如果不能获取到，只有进行等待的情况下，是可以响应中断的。<br>而用synchronized修饰的话，当一个线程处于等待某个锁的状态，是无法被中断的，只有一直等待下去。</p>
+<h3 id="2-ReentrantLock"><a href="#2-ReentrantLock" class="headerlink" title="2.ReentrantLock"></a>2.ReentrantLock</h3><p>ReentrantLock，意思是“可重入锁”，关于可重入锁的概念在下一节讲述。ReentrantLock是唯一实现了Lock接口的类，并且ReentrantLock提供了更多的方法。下面通过一些实例看具体看一下如何使用ReentrantLock。</p>
+<p>lock()的正确使用方法:<br>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    Lock lock = new ReentrantLock();    //注意这个地方
+    lock.lock();
+    try {
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        for(int i=0;i&lt;5;i++) {
+            arrayList.add(i);
+        }
+    } catch (Exception e) {
+        // TODO: handle exception
+    }finally {
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+        lock.unlock();
+    }
+}</code></pre><p>}<br>这段代码的输出结果是什么?</p>
+<p>Thread-0得到了锁<br>Thread-1得到了锁<br>Thread-0释放了锁<br>Thread-1释放了锁<br>也许有朋友会问，怎么会输出这个结果？第二个线程怎么会在第一个线程释放锁之前得到了锁？原因在于，在insert方法中的lock变量是局部变量，每个线程执行该方法时都会保存一个副本，那么理所当然每个线程执行到lock.lock()处获取的是不同的锁，所以就不会发生冲突。</p>
+<p>知道了原因改起来就比较容易了，只需要将lock声明为类的属性即可。</p>
+<p>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    private Lock lock = new ReentrantLock();    //注意这个地方<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    lock.lock();
+    try {
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        for(int i=0;i&lt;5;i++) {
+            arrayList.add(i);
+        }
+    } catch (Exception e) {
+        // TODO: handle exception
+    }finally {
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+        lock.unlock();
+    }
+}</code></pre><p>}<br>这样就是正确地使用Lock的方法了。</p>
+<p>tryLock()的使用方法<br>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    private Lock lock = new ReentrantLock();    //注意这个地方<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    if(lock.tryLock()) {
+        try {
+            System.out.println(thread.getName()+&quot;得到了锁&quot;);
+            for(int i=0;i&lt;5;i++) {
+                arrayList.add(i);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }finally {
+            System.out.println(thread.getName()+&quot;释放了锁&quot;);
+            lock.unlock();
+        }
+    } else {
+        System.out.println(thread.getName()+&quot;获取锁失败&quot;);
+    }
+}</code></pre><p>}<br>输出结果：</p>
+<p>Thread-0得到了锁<br>Thread-1获取锁失败<br>Thread-0释放了<br>lockInterruptibly()响应中断的使用方法：<br>public class Test {<br>    private Lock lock = new ReentrantLock();<br>    public static void main(String[] args)  {<br>        Test test = new Test();<br>        MyThread thread1 = new MyThread(test);<br>        MyThread thread2 = new MyThread(test);<br>        thread1.start();<br>        thread2.start();</p>
+<pre><code>    try {
+        Thread.sleep(2000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    thread2.interrupt();
+}  
+
+public void insert(Thread thread) throws InterruptedException{
+    lock.lockInterruptibly();   //注意，如果需要正确中断等待锁的线程，必须将获取锁放在外面，然后将InterruptedException抛出
+    try {  
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        long startTime = System.currentTimeMillis();
+        for(    ;     ;) {
+            if(System.currentTimeMillis() - startTime &gt;= Integer.MAX_VALUE)
+                break;
+            //插入数据
+        }
+    }
+    finally {
+        System.out.println(Thread.currentThread().getName()+&quot;执行finally&quot;);
+        lock.unlock();
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+    }  
+}</code></pre><p>}</p>
+<p>class MyThread extends Thread {<br>    private Test test = null;<br>    public MyThread(Test test) {<br>        this.test = test;<br>    }<br>    @Override<br>    public void run() {</p>
+<pre><code>    try {
+        test.insert(Thread.currentThread());
+    } catch (InterruptedException e) {
+        System.out.println(Thread.currentThread().getName()+&quot;被中断&quot;);
+    }
+}</code></pre><p>}</p>
+<p>运行之后，发现thread2能够被正确中断。</p>
+<p>3.ReadWriteLock<br>ReadWriteLock也是一个接口，在它里面只定义了两个方法：</p>
+<p>public interface ReadWriteLock {<br>    /**<br>     * Returns the lock used for reading.<br>     *<br>     * @return the lock used for reading.<br>     */<br>    Lock readLock();</p>
+<pre><code>/**
+ * Returns the lock used for writing.
+ *
+ * @return the lock used for writing.
+ */
+Lock writeLock();</code></pre><p>}</p>
+<p>一个用来获取读锁，一个用来获取写锁。也就是说将文件的读写操作分开，分成2个锁来分配给线程，从而使得多个线程可以同时进行读操作。下面的ReentrantReadWriteLock实现了ReadWriteLock接口。</p>
+<ol start="4">
+<li>ReentrantReadWriteLock<br>ReentrantReadWriteLock里面提供了很多丰富的方法，不过最主要的有两个方法：readLock()和writeLock()用来获取读锁和写锁。</li>
+</ol>
+<p>下面通过几个例子来看一下ReentrantReadWriteLock具体用法。<br>假如有多个线程要同时进行读操作的话，先看一下synchronized达到的效果：</p>
+<p>public class Test {<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+}  
+
+public synchronized void get(Thread thread) {
+    long start = System.currentTimeMillis();
+    while(System.currentTimeMillis() - start &lt;= 1) {
+        System.out.println(thread.getName()+&quot;正在进行读操作&quot;);
+    }
+    System.out.println(thread.getName()+&quot;读操作完毕&quot;);
+}</code></pre><p>}<br>这段程序的输出结果会是，直到thread1执行完读操作之后，才会打印thread2执行读操作的信息。</p>
+<p>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0读操作完毕<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1读操作完毕<br>而改成用读写锁的话：</p>
+<p>public class Test {<br>    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();</p>
+<pre><code>public static void main(String[] args)  {
+    final Test test = new Test();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+}  
+
+public void get(Thread thread) {
+    rwl.readLock().lock();
+    try {
+        long start = System.currentTimeMillis();
+
+        while(System.currentTimeMillis() - start &lt;= 1) {
+            System.out.println(thread.getName()+&quot;正在进行读操作&quot;);
+        }
+        System.out.println(thread.getName()+&quot;读操作完毕&quot;);
+    } finally {
+        rwl.readLock().unlock();
+    }
+}</code></pre><p>}<br>此时打印的结果为：</p>
+<p>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0读操作完毕<br>Thread-1读操作完毕<br>说明thread1和thread2在同时进行读操作。这样就大大提升了读操作的效率。</p>
+<p>不过要注意的是：<br>如果有一个线程已经占用了读锁，则此时其他线程如果要申请写锁，则申请写锁的线程会一直等待释放读锁。<br>如果有一个线程已经占用了写锁，则此时其他线程如果申请写锁或者读锁，则申请的线程会一直等待释放写锁。</p>
+<p>关于ReentrantReadWriteLock类中的其他方法感兴趣的朋友可以自行查阅API文档。</p>
+<p>5.Lock和synchronized的选择<br>总结来说，Lock和synchronized有以下几点不同：<br>　　1）Lock是一个接口，而synchronized是Java中的关键字，synchronized是内置的语言实现；<br>　　2）synchronized在发生异常时，会自动释放线程占有的锁，因此不会导致死锁现象发生；而Lock在发生异常时，如果没有主动通过unLock()去释放锁，则很可能造成死锁现象，因此使用Lock时需要在finally块中释放锁；<br>　　3）Lock可以让等待锁的线程响应中断，而synchronized却不行，使用synchronized时，等待的线程会一直等待下去，不能够响应中断；<br>　　4）通过Lock可以知道有没有成功获取锁，而synchronized却无法办到。<br>　　5）Lock可以提高多个线程进行读操作的效率。</p>
+<p>在性能上来说，如果竞争资源不激烈，两者的性能是差不多的，而当竞争资源非常激烈时（即有大量线程同时竞争），此时Lock的性能要远远优于synchronized。所以说，在具体使用时要根据适当情况选择。</p>
+<p>锁的相关概念介绍<br>在前面介绍了Lock的基本使用，这一节来介绍一下与锁相关的几个概念。</p>
+<p>1.可重入锁<br>如果锁具备可重入性，则称作为可重入锁。像synchronized和ReentrantLock都是可重入锁，可重入性在我看来实际上表明了锁的分配机制：基于线程的分配，而不是基于方法调用的分配。举个简单的例子，当一个线程执行到某个synchronized方法时，比如说method1，而在method1中会调用另外一个synchronized方法method2，此时线程不必重新去申请锁，而是可以直接执行方法method2。</p>
+<p>看下面这段代码就明白了：</p>
+<p>class MyClass {<br>    public synchronized void method1() {<br>        method2();<br>    }</p>
+<pre><code>public synchronized void method2() {
+
+}</code></pre><p>}<br>上述代码中的两个方法method1和method2都用synchronized修饰了，假如某一时刻，线程A执行到了method1，此时线程A获取了这个对象的锁，而由于method2也是synchronized方法，假如synchronized不具备可重入性，此时线程A需要重新申请锁。但是这就会造成一个问题，因为线程A已经持有了该对象的锁，而又在申请获取该对象的锁，这样就会线程A一直等待永远不会获取到的锁。<br>　　<br>而由于synchronized和Lock都具备可重入性，所以不会发生上述现象。</p>
+<p>2.可中断锁<br>可中断锁：顾名思义，就是可以相应中断的锁。<br>在Java中，synchronized就不是可中断锁，而Lock是可中断锁。</p>
+<p>如果某一线程A正在执行锁中的代码，另一线程B正在等待获取该锁，可能由于等待时间过长，线程B不想等待了，想先处理其他事情，我们可以让它中断自己或者在别的线程中中断它，这种就是可中断锁。</p>
+<p>在前面演示lockInterruptibly()的用法时已经体现了Lock的可中断性。</p>
+<p>3.公平锁<br>公平锁即尽量以请求锁的顺序来获取锁。比如同是有多个线程在等待一个锁，当这个锁被释放时，等待时间最久的线程（最先请求的线程）会获得该所，这种就是公平锁。</p>
+<p>非公平锁即无法保证锁的获取是按照请求锁的顺序进行的。这样就可能导致某个或者一些线程永远获取不到锁。</p>
+<p>在Java中，synchronized就是非公平锁，它无法保证等待的线程获取锁的顺序。<br>而对于ReentrantLock和ReentrantReadWriteLock，它默认情况下是非公平锁，但是可以设置为公平锁。</p>
+<p>看一下这2个类的源代码就清楚了：</p>
+<p>在ReentrantLock中定义了2个静态内部类，一个是NotFairSync，一个是FairSync，分别用来实现非公平锁和公平锁。</p>
+<p>我们可以在创建ReentrantLock对象时，通过以下方式来设置锁的公平性：</p>
+<p>ReentrantLock lock = new ReentrantLock(true);</p>
+<p>如果参数为true表示为公平锁，为fasle为非公平锁。默认情况下，如果使用无参构造器，则是非公平锁。</p>
+<p>另外在ReentrantLock类中定义了很多方法，比如：<br>　　isFair() //判断锁是否是公平锁<br>　　isLocked() //判断锁是否被任何线程获取了<br>　　isHeldByCurrentThread() //判断锁是否被当前线程获取了<br>　　hasQueuedThreads() //判断是否有线程在等待该锁</p>
+<p>在ReentrantReadWriteLock中也有类似的方法，同样也可以设置为公平锁和非公平锁。不过要记住，ReentrantReadWriteLock并未实现Lock接口，它实现的是ReadWriteLock接口。</p>
+<p>4.读写锁<br>读写锁将对一个资源（比如文件）的访问分成了2个锁，一个读锁和一个写锁。<br>　　正因为有了读写锁，才使得多个线程之间的读操作不会发生冲突。<br>　　ReadWriteLock就是读写锁，它是一个接口，ReentrantReadWriteLock实现了这个接口。<br>　　可以通过readLock()获取读锁，通过writeLock()获取写锁。<br>　　上面已经演示过了读写锁的使用方法，在此不再赘述。</p>
+<p>作者：尼小摩<br>链接：<a href="https://www.jianshu.com/p/b1581c35c881" target="_blank" rel="noopener">https://www.jianshu.com/p/b1581c35c881</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag"># 多线程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/21/java-reflect/" rel="next" title="java reflect">
+                <i class="fa fa-chevron-left"></i> java reflect
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/21/restful-%E4%BB%8B%E7%BB%8D/" rel="prev" title="restful 介绍">
+                restful 介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/hope.jpeg"
+                alt="yang li" />
+            
+              <p class="site-author-name" itemprop="name">yang li</p>
+              <p class="site-description motion-element" itemprop="description">try hope</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Minus-goat" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-线程与进程："><span class="nav-number">1.</span> <span class="nav-text">1.线程与进程：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Thread的几个重要方法："><span class="nav-number">2.</span> <span class="nav-text">2. Thread的几个重要方法：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#线程总共有5大状态"><span class="nav-number">3.</span> <span class="nav-text">线程总共有5大状态:</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-锁类型"><span class="nav-number">4.</span> <span class="nav-text">6. 锁类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-Lock"><span class="nav-number">4.1.</span> <span class="nav-text">1.Lock</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-ReentrantLock"><span class="nav-number">4.2.</span> <span class="nav-text">2.ReentrantLock</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">yang li</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+<div>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<span id="busuanzi_container_site_pv" style='display:none'>
+    本站总访问量 <span id="busuanzi_value_site_pv"></span> 次
+    <span class="post-meta-divider">|</span>
+</span>
+<span id="busuanzi_container_site_uv" style='display:none'>
+    有<span id="busuanzi_value_site_uv"></span>人看过我的博客啦
+</span>
+</div>
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  <script type="text/javascript">
+    // Popup Window;
+    var isfetched = false;
+    var isXml = true;
+    // Search DB path;
+    var search_path = "search.xml";
+    if (search_path.length === 0) {
+      search_path = "search.xml";
+    } else if (/json$/i.test(search_path)) {
+      isXml = false;
+    }
+    var path = "/" + search_path;
+    // monitor main search box;
+
+    var onPopupClose = function (e) {
+      $('.popup').hide();
+      $('#local-search-input').val('');
+      $('.search-result-list').remove();
+      $('#no-result').remove();
+      $(".local-search-pop-overlay").remove();
+      $('body').css('overflow', '');
+    }
+
+    function proceedsearch() {
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay"></div>')
+        .css('overflow', 'hidden');
+      $('.search-popup-overlay').click(onPopupClose);
+      $('.popup').toggle();
+      var $localSearchInput = $('#local-search-input');
+      $localSearchInput.attr("autocapitalize", "none");
+      $localSearchInput.attr("autocorrect", "off");
+      $localSearchInput.focus();
+    }
+
+    // search function;
+    var searchFunc = function(path, search_id, content_id) {
+      'use strict';
+
+      // start loading animation
+      $("body")
+        .append('<div class="search-popup-overlay local-search-pop-overlay">' +
+          '<div id="search-loading-icon">' +
+          '<i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>' +
+          '</div>' +
+          '</div>')
+        .css('overflow', 'hidden');
+      $("#search-loading-icon").css('margin', '20% auto 0 auto').css('text-align', 'center');
+
+      $.ajax({
+        url: path,
+        dataType: isXml ? "xml" : "json",
+        async: true,
+        success: function(res) {
+          // get the contents from search data
+          isfetched = true;
+          $('.popup').detach().appendTo('.header-inner');
+          var datas = isXml ? $("entry", res).map(function() {
+            return {
+              title: $("title", this).text(),
+              content: $("content",this).text(),
+              url: $("url" , this).text()
+            };
+          }).get() : res;
+          var input = document.getElementById(search_id);
+          var resultContent = document.getElementById(content_id);
+          var inputEventFunction = function() {
+            var searchText = input.value.trim().toLowerCase();
+            var keywords = searchText.split(/[\s\-]+/);
+            if (keywords.length > 1) {
+              keywords.push(searchText);
+            }
+            var resultItems = [];
+            if (searchText.length > 0) {
+              // perform local searching
+              datas.forEach(function(data) {
+                var isMatch = false;
+                var hitCount = 0;
+                var searchTextCount = 0;
+                var title = data.title.trim();
+                var titleInLowerCase = title.toLowerCase();
+                var content = data.content.trim().replace(/<[^>]+>/g,"");
+                var contentInLowerCase = content.toLowerCase();
+                var articleUrl = decodeURIComponent(data.url);
+                var indexOfTitle = [];
+                var indexOfContent = [];
+                // only match articles with not empty titles
+                if(title != '') {
+                  keywords.forEach(function(keyword) {
+                    function getIndexByWord(word, text, caseSensitive) {
+                      var wordLen = word.length;
+                      if (wordLen === 0) {
+                        return [];
+                      }
+                      var startPosition = 0, position = [], index = [];
+                      if (!caseSensitive) {
+                        text = text.toLowerCase();
+                        word = word.toLowerCase();
+                      }
+                      while ((position = text.indexOf(word, startPosition)) > -1) {
+                        index.push({position: position, word: word});
+                        startPosition = position + wordLen;
+                      }
+                      return index;
+                    }
+
+                    indexOfTitle = indexOfTitle.concat(getIndexByWord(keyword, titleInLowerCase, false));
+                    indexOfContent = indexOfContent.concat(getIndexByWord(keyword, contentInLowerCase, false));
+                  });
+                  if (indexOfTitle.length > 0 || indexOfContent.length > 0) {
+                    isMatch = true;
+                    hitCount = indexOfTitle.length + indexOfContent.length;
+                  }
+                }
+
+                // show search results
+
+                if (isMatch) {
+                  // sort index by position of keyword
+
+                  [indexOfTitle, indexOfContent].forEach(function (index) {
+                    index.sort(function (itemLeft, itemRight) {
+                      if (itemRight.position !== itemLeft.position) {
+                        return itemRight.position - itemLeft.position;
+                      } else {
+                        return itemLeft.word.length - itemRight.word.length;
+                      }
+                    });
+                  });
+
+                  // merge hits into slices
+
+                  function mergeIntoSlice(text, start, end, index) {
+                    var item = index[index.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    var hits = [];
+                    var searchTextCountInSlice = 0;
+                    while (position + word.length <= end && index.length != 0) {
+                      if (word === searchText) {
+                        searchTextCountInSlice++;
+                      }
+                      hits.push({position: position, length: word.length});
+                      var wordEnd = position + word.length;
+
+                      // move to next position of hit
+
+                      index.pop();
+                      while (index.length != 0) {
+                        item = index[index.length - 1];
+                        position = item.position;
+                        word = item.word;
+                        if (wordEnd > position) {
+                          index.pop();
+                        } else {
+                          break;
+                        }
+                      }
+                    }
+                    searchTextCount += searchTextCountInSlice;
+                    return {
+                      hits: hits,
+                      start: start,
+                      end: end,
+                      searchTextCount: searchTextCountInSlice
+                    };
+                  }
+
+                  var slicesOfTitle = [];
+                  if (indexOfTitle.length != 0) {
+                    slicesOfTitle.push(mergeIntoSlice(title, 0, title.length, indexOfTitle));
+                  }
+
+                  var slicesOfContent = [];
+                  while (indexOfContent.length != 0) {
+                    var item = indexOfContent[indexOfContent.length - 1];
+                    var position = item.position;
+                    var word = item.word;
+                    // cut out 100 characters
+                    var start = position - 20;
+                    var end = position + 80;
+                    if(start < 0){
+                      start = 0;
+                    }
+                    if (end < position + word.length) {
+                      end = position + word.length;
+                    }
+                    if(end > content.length){
+                      end = content.length;
+                    }
+                    slicesOfContent.push(mergeIntoSlice(content, start, end, indexOfContent));
+                  }
+
+                  // sort slices in content by search text's count and hits' count
+
+                  slicesOfContent.sort(function (sliceLeft, sliceRight) {
+                    if (sliceLeft.searchTextCount !== sliceRight.searchTextCount) {
+                      return sliceRight.searchTextCount - sliceLeft.searchTextCount;
+                    } else if (sliceLeft.hits.length !== sliceRight.hits.length) {
+                      return sliceRight.hits.length - sliceLeft.hits.length;
+                    } else {
+                      return sliceLeft.start - sliceRight.start;
+                    }
+                  });
+
+                  // select top N slices in content
+
+                  var upperBound = parseInt('1');
+                  if (upperBound >= 0) {
+                    slicesOfContent = slicesOfContent.slice(0, upperBound);
+                  }
+
+                  // highlight title and content
+
+                  function highlightKeyword(text, slice) {
+                    var result = '';
+                    var prevEnd = slice.start;
+                    slice.hits.forEach(function (hit) {
+                      result += text.substring(prevEnd, hit.position);
+                      var end = hit.position + hit.length;
+                      result += '<b class="search-keyword">' + text.substring(hit.position, end) + '</b>';
+                      prevEnd = end;
+                    });
+                    result += text.substring(prevEnd, slice.end);
+                    return result;
+                  }
+
+                  var resultItem = '';
+
+                  if (slicesOfTitle.length != 0) {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + highlightKeyword(title, slicesOfTitle[0]) + "</a>";
+                  } else {
+                    resultItem += "<li><a href='" + articleUrl + "' class='search-result-title'>" + title + "</a>";
+                  }
+
+                  slicesOfContent.forEach(function (slice) {
+                    resultItem += "<a href='" + articleUrl + "'>" +
+                      "<p class=\"search-result\">" + highlightKeyword(content, slice) +
+                      "...</p>" + "</a>";
+                  });
+
+                  resultItem += "</li>";
+                  resultItems.push({
+                    item: resultItem,
+                    searchTextCount: searchTextCount,
+                    hitCount: hitCount,
+                    id: resultItems.length
+                  });
+                }
+              })
+            };
+            if (keywords.length === 1 && keywords[0] === "") {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-search fa-5x" /></div>'
+            } else if (resultItems.length === 0) {
+              resultContent.innerHTML = '<div id="no-result"><i class="fa fa-frown-o fa-5x" /></div>'
+            } else {
+              resultItems.sort(function (resultLeft, resultRight) {
+                if (resultLeft.searchTextCount !== resultRight.searchTextCount) {
+                  return resultRight.searchTextCount - resultLeft.searchTextCount;
+                } else if (resultLeft.hitCount !== resultRight.hitCount) {
+                  return resultRight.hitCount - resultLeft.hitCount;
+                } else {
+                  return resultRight.id - resultLeft.id;
+                }
+              });
+              var searchResultList = '<ul class=\"search-result-list\">';
+              resultItems.forEach(function (result) {
+                searchResultList += result.item;
+              })
+              searchResultList += "</ul>";
+              resultContent.innerHTML = searchResultList;
+            }
+          }
+
+          if ('auto' === 'auto') {
+            input.addEventListener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

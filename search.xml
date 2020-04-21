@@ -16,6 +16,12 @@
 <p>test()<br>test1()<br>test2(9)</p>
 <h1 id="输出"><a href="#输出" class="headerlink" title="输出:"></a>输出:</h1><p>#test called<br>#test1 called<br>#test2 called and value is 9 </p>
 ]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>装饰器</tag>
+      </tags>
   </entry>
   <entry>
     <title>My New Post</title>
@@ -50,8 +56,378 @@
 <p>二、查看Class类在java中的api详解（1.7的API）<br>如何阅读java中的api详见java基础之——String字符串处理</p>
 <p>————————————————<br>版权声明：本文为CSDN博主「敬业的小码哥」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/sinat_38259539/java/article/details/71799078" target="_blank" rel="noopener">https://blog.csdn.net/sinat_38259539/java/article/details/71799078</a></p>
 ]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
       <tags>
-        <tag>java</tag>
+        <tag>反射</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>java多线程</title>
+    <url>/2020/04/21/java%E5%A4%9A%E7%BA%BF%E7%A8%8B/</url>
+    <content><![CDATA[<h2 id="1-线程与进程："><a href="#1-线程与进程：" class="headerlink" title="1.线程与进程："></a>1.线程与进程：</h2><p>在开始之前先把进程与线程进行区分一下，一个程序最少需要一个进程，而一个进程最少需要一个线程。关系是线程–&gt;进程–&gt;程序的大致组成结构。所以线程是程序执行流的最小单位，而进程是系统进行资源分配和调度的一个独立单位。以下我们所有讨论的都是建立在线程基础之上。</p>
+<h2 id="2-Thread的几个重要方法："><a href="#2-Thread的几个重要方法：" class="headerlink" title="2. Thread的几个重要方法："></a>2. Thread的几个重要方法：</h2><p>start()方法，调用该方法开始执行该线程；<br>stop()方法，调用该方法强制结束该线程执行；<br>join方法，调用该方法等待该线程结束。<br>sleep()方法，调用该方法该线程进入等待。<br>run()方法，调用该方法直接执行线程的run()方法，但是线程调用start()方法时也会运行run()方法，区别就是一个是由线程调度运行run()方法，一个是直接调用了线程中的run()方法！！<br>3. 那wait()和notify()呢？<br>要注意，其实wait()与notify()方法是Object的方法，不是Thread的方法！！同时，wait()与notify()会配合使用，分别表示线程挂起和线程恢复。</p>
+<ol start="4">
+<li>wait()与sleep()的区别，简单来说wait()会释放对象锁而sleep()不会释放对象锁。</li>
+<li>线程状态：</li>
+</ol>
+<h2 id="线程总共有5大状态"><a href="#线程总共有5大状态" class="headerlink" title="线程总共有5大状态:"></a>线程总共有5大状态:</h2><p>新建状态：新建线程对象，并没有调用start()方法之前<br>就绪状态：调用start()方法之后线程就进入就绪状态，但是并不是说只要调用start()方法线程就马上变为当前线程，在变为当前线程之前都是为就绪状态。值得一提的是，线程在睡眠和挂起中恢复的时候也会进入就绪状态哦。<br>运行状态：线程被设置为当前线程，开始执行run()方法。就是线程进入运行状态<br>阻塞状态：线程被暂停，比如说调用sleep()方法后线程就进入阻塞状态<br>死亡状态：线程执行结束</p>
+<h2 id="6-锁类型"><a href="#6-锁类型" class="headerlink" title="6. 锁类型"></a>6. 锁类型</h2><p>可重入锁：在执行对象中所有同步方法不用再次获得锁<br>可中断锁：在等待获取锁过程中可中断<br>公平锁： 按等待获取锁的线程的等待时间进行获取，等待时间长的具有优先获取锁权利<br>读写锁：对资源读取和写入的时候拆分为2部分处理，读的时候可以多线程一起读，写的时候必须同步地写<br>synchronized与Lock的区别<br>我把两者的区别分类到了一个表中，方便大家对比：</p>
+<p>synchronized的缺陷<br>synchronized是java中的一个关键字，也就是说是Java语言内置的特性。那么为什么会出现Lock呢？<br>　　在上面一篇文章中，我们了解到如果一个代码块被synchronized修饰了，当一个线程获取了对应的锁，并执行该代码块时，其他线程便只能一直等待，等待获取锁的线程释放锁，而这里获取锁的线程释放锁只会有两种情况：<br>　　1）获取锁的线程执行完了该代码块，然后线程释放对锁的占有；<br>　　2）线程执行发生异常，此时JVM会让线程自动释放锁。</p>
+<p>那么如果这个获取锁的线程由于要等待IO或者其他原因（比如调用sleep方法）被阻塞了，但是又没有释放锁，其他线程便只能干巴巴地等待，试想一下，这多么影响程序执行效率。<br>　　因此就需要有一种机制可以不让等待的线程一直无期限地等待下去（比如只等待一定的时间或者能够响应中断），通过Lock就可以办到。<br>　　再举个例子：当有多个线程读写文件时，读操作和写操作会发生冲突现象，写操作和写操作会发生冲突现象，但是读操作和读操作不会发生冲突现象。</p>
+<p>但是采用synchronized关键字来实现同步的话，就会导致一个问题：<br>　　如果多个线程都只是进行读操作，所以当一个线程在进行读操作时，其他线程只能等待无法进行读操作。<br>　　因此就需要一种机制来使得多个线程都只是进行读操作时，线程之间不会发生冲突，通过Lock就可以办到。<br>　　另外，通过Lock可以知道线程有没有成功获取到锁。这个是synchronized无法办到的。</p>
+<p>总结一下，也就是说Lock提供了比synchronized更多的功能。但是要注意以下几点：<br>　　1）Lock不是Java语言内置的，synchronized是Java语言的关键字，因此是内置特性。Lock是一个类，通过这个类可以实现同步访问；<br>　　2）Lock和synchronized有一点非常大的不同，采用synchronized不需要用户去手动释放锁，当synchronized方法或者synchronized代码块执行完之后，系统会自动让线程释放对锁的占用；而Lock则必须要用户去手动释放锁，如果没有主动释放锁，就有可能导致出现死锁现象。</p>
+<p>java.util.concurrent.locks包下常用的类<br>下面我们就来探讨一下java.util.concurrent.locks包中常用的类和接口。</p>
+<h3 id="1-Lock"><a href="#1-Lock" class="headerlink" title="1.Lock"></a>1.Lock</h3><p>首先要说明的就是Lock，通过查看Lock的源码可知，Lock是一个接口：</p>
+<p>public interface Lock {<br>    void lock();<br>    void lockInterruptibly() throws InterruptedException;<br>    boolean tryLock();<br>    boolean tryLock(long time, TimeUnit unit) throws InterruptedException;<br>    void unlock();<br>    Condition newCondition();<br>}<br>下面来逐个讲述Lock接口中每个方法的使用:<br>　　 lock()、tryLock()、tryLock(long time, TimeUnit unit)和lockInterruptibly()是用来获取锁的。<br>　　unLock()方法是用来释放锁的。<br>　　newCondition()这个方法暂且不在此讲述，会在后面的线程协作一文中讲述。</p>
+<p>在Lock中声明了四个方法来获取锁，那么这四个方法有何区别呢？<br>　　首先lock()方法是平常使用得最多的一个方法，就是用来获取锁。如果锁已被其他线程获取，则进行等待。<br>　　由于在前面讲到如果采用Lock，必须主动去释放锁，并且在发生异常时，不会自动释放锁。因此一般来说，使用Lock必须在try{}catch{}块中进行，并且将释放锁的操作放在finally块中进行，以保证锁一定被被释放，防止死锁的发生。通常使用Lock来进行同步的话，是以下面这种形式去使用的：</p>
+<p>Lock lock = …;<br>lock.lock();<br>try{<br>    //处理任务<br>}catch(Exception ex){</p>
+<p>}finally{<br>    lock.unlock();   //释放锁<br>}<br>tryLock()方法是有返回值的，它表示用来尝试获取锁，如果获取成功，则返回true，如果获取失败（即锁已被其他线程获取），则返回false，也就说这个方法无论如何都会立即返回。在拿不到锁时不会一直在那等待。<br>tryLock(long time, TimeUnit unit)方法和tryLock()方法是类似的，只不过区别在于这个方法在拿不到锁时会等待一定的时间，在时间期限之内如果还拿不到锁，就返回false。如果如果一开始拿到锁或者在等待期间内拿到了锁，则返回true。<br>所以，一般情况下通过tryLock来获取锁时是这样使用的：</p>
+<p>Lock lock = …;<br>if(lock.tryLock()) {<br>     try{<br>         //处理任务<br>     }catch(Exception ex){</p>
+<pre><code>}finally{
+    lock.unlock();   //释放锁
+} </code></pre><p>}else {<br>    //如果不能获取锁，则直接做其他事情<br>}<br>lockInterruptibly()方法比较特殊，当通过这个方法去获取锁时，如果线程正在等待获取锁，则这个线程能够响应中断，即中断线程的等待状态。也就使说，当两个线程同时通过lock.lockInterruptibly()想获取某个锁时，假若此时线程A获取到了锁，而线程B只有在等待，那么对线程B调用threadB.interrupt()方法能够中断线程B的等待过程。</p>
+<p>由于lockInterruptibly()的声明中抛出了异常，所以lock.lockInterruptibly()必须放在try块中或者在调用lockInterruptibly()的方法外声明抛出InterruptedException。</p>
+<p>因此lockInterruptibly()一般的使用形式如下：</p>
+<p>public void method() throws InterruptedException {<br>    lock.lockInterruptibly();<br>    try {<br>     //…..<br>    }<br>    finally {<br>        lock.unlock();<br>    }<br>}<br>注意，当一个线程获取了锁之后，是不会被interrupt()方法中断的。单独调用interrupt()方法不能中断正在运行过程中的线程，只能中断阻塞过程中的线程。</p>
+<p>因此当通过lockInterruptibly()方法获取某个锁时，如果不能获取到，只有进行等待的情况下，是可以响应中断的。<br>而用synchronized修饰的话，当一个线程处于等待某个锁的状态，是无法被中断的，只有一直等待下去。</p>
+<h3 id="2-ReentrantLock"><a href="#2-ReentrantLock" class="headerlink" title="2.ReentrantLock"></a>2.ReentrantLock</h3><p>ReentrantLock，意思是“可重入锁”，关于可重入锁的概念在下一节讲述。ReentrantLock是唯一实现了Lock接口的类，并且ReentrantLock提供了更多的方法。下面通过一些实例看具体看一下如何使用ReentrantLock。</p>
+<p>lock()的正确使用方法:<br>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    Lock lock = new ReentrantLock();    //注意这个地方
+    lock.lock();
+    try {
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        for(int i=0;i&lt;5;i++) {
+            arrayList.add(i);
+        }
+    } catch (Exception e) {
+        // TODO: handle exception
+    }finally {
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+        lock.unlock();
+    }
+}</code></pre><p>}<br>这段代码的输出结果是什么?</p>
+<p>Thread-0得到了锁<br>Thread-1得到了锁<br>Thread-0释放了锁<br>Thread-1释放了锁<br>也许有朋友会问，怎么会输出这个结果？第二个线程怎么会在第一个线程释放锁之前得到了锁？原因在于，在insert方法中的lock变量是局部变量，每个线程执行该方法时都会保存一个副本，那么理所当然每个线程执行到lock.lock()处获取的是不同的锁，所以就不会发生冲突。</p>
+<p>知道了原因改起来就比较容易了，只需要将lock声明为类的属性即可。</p>
+<p>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    private Lock lock = new ReentrantLock();    //注意这个地方<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    lock.lock();
+    try {
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        for(int i=0;i&lt;5;i++) {
+            arrayList.add(i);
+        }
+    } catch (Exception e) {
+        // TODO: handle exception
+    }finally {
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+        lock.unlock();
+    }
+}</code></pre><p>}<br>这样就是正确地使用Lock的方法了。</p>
+<p>tryLock()的使用方法<br>public class Test {<br>    private ArrayList<Integer> arrayList = new ArrayList<Integer>();<br>    private Lock lock = new ReentrantLock();    //注意这个地方<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.insert(Thread.currentThread());
+        };
+    }.start();
+}  
+
+public void insert(Thread thread) {
+    if(lock.tryLock()) {
+        try {
+            System.out.println(thread.getName()+&quot;得到了锁&quot;);
+            for(int i=0;i&lt;5;i++) {
+                arrayList.add(i);
+            }
+        } catch (Exception e) {
+            // TODO: handle exception
+        }finally {
+            System.out.println(thread.getName()+&quot;释放了锁&quot;);
+            lock.unlock();
+        }
+    } else {
+        System.out.println(thread.getName()+&quot;获取锁失败&quot;);
+    }
+}</code></pre><p>}<br>输出结果：</p>
+<p>Thread-0得到了锁<br>Thread-1获取锁失败<br>Thread-0释放了<br>lockInterruptibly()响应中断的使用方法：<br>public class Test {<br>    private Lock lock = new ReentrantLock();<br>    public static void main(String[] args)  {<br>        Test test = new Test();<br>        MyThread thread1 = new MyThread(test);<br>        MyThread thread2 = new MyThread(test);<br>        thread1.start();<br>        thread2.start();</p>
+<pre><code>    try {
+        Thread.sleep(2000);
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    }
+    thread2.interrupt();
+}  
+
+public void insert(Thread thread) throws InterruptedException{
+    lock.lockInterruptibly();   //注意，如果需要正确中断等待锁的线程，必须将获取锁放在外面，然后将InterruptedException抛出
+    try {  
+        System.out.println(thread.getName()+&quot;得到了锁&quot;);
+        long startTime = System.currentTimeMillis();
+        for(    ;     ;) {
+            if(System.currentTimeMillis() - startTime &gt;= Integer.MAX_VALUE)
+                break;
+            //插入数据
+        }
+    }
+    finally {
+        System.out.println(Thread.currentThread().getName()+&quot;执行finally&quot;);
+        lock.unlock();
+        System.out.println(thread.getName()+&quot;释放了锁&quot;);
+    }  
+}</code></pre><p>}</p>
+<p>class MyThread extends Thread {<br>    private Test test = null;<br>    public MyThread(Test test) {<br>        this.test = test;<br>    }<br>    @Override<br>    public void run() {</p>
+<pre><code>    try {
+        test.insert(Thread.currentThread());
+    } catch (InterruptedException e) {
+        System.out.println(Thread.currentThread().getName()+&quot;被中断&quot;);
+    }
+}</code></pre><p>}</p>
+<p>运行之后，发现thread2能够被正确中断。</p>
+<p>3.ReadWriteLock<br>ReadWriteLock也是一个接口，在它里面只定义了两个方法：</p>
+<p>public interface ReadWriteLock {<br>    /**<br>     * Returns the lock used for reading.<br>     *<br>     * @return the lock used for reading.<br>     */<br>    Lock readLock();</p>
+<pre><code>/**
+ * Returns the lock used for writing.
+ *
+ * @return the lock used for writing.
+ */
+Lock writeLock();</code></pre><p>}</p>
+<p>一个用来获取读锁，一个用来获取写锁。也就是说将文件的读写操作分开，分成2个锁来分配给线程，从而使得多个线程可以同时进行读操作。下面的ReentrantReadWriteLock实现了ReadWriteLock接口。</p>
+<ol start="4">
+<li>ReentrantReadWriteLock<br>ReentrantReadWriteLock里面提供了很多丰富的方法，不过最主要的有两个方法：readLock()和writeLock()用来获取读锁和写锁。</li>
+</ol>
+<p>下面通过几个例子来看一下ReentrantReadWriteLock具体用法。<br>假如有多个线程要同时进行读操作的话，先看一下synchronized达到的效果：</p>
+<p>public class Test {<br>    public static void main(String[] args)  {<br>        final Test test = new Test();</p>
+<pre><code>    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+}  
+
+public synchronized void get(Thread thread) {
+    long start = System.currentTimeMillis();
+    while(System.currentTimeMillis() - start &lt;= 1) {
+        System.out.println(thread.getName()+&quot;正在进行读操作&quot;);
+    }
+    System.out.println(thread.getName()+&quot;读操作完毕&quot;);
+}</code></pre><p>}<br>这段程序的输出结果会是，直到thread1执行完读操作之后，才会打印thread2执行读操作的信息。</p>
+<p>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0读操作完毕<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1读操作完毕<br>而改成用读写锁的话：</p>
+<p>public class Test {<br>    private ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();</p>
+<pre><code>public static void main(String[] args)  {
+    final Test test = new Test();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+    new Thread(){
+        public void run() {
+            test.get(Thread.currentThread());
+        };
+    }.start();
+
+}  
+
+public void get(Thread thread) {
+    rwl.readLock().lock();
+    try {
+        long start = System.currentTimeMillis();
+
+        while(System.currentTimeMillis() - start &lt;= 1) {
+            System.out.println(thread.getName()+&quot;正在进行读操作&quot;);
+        }
+        System.out.println(thread.getName()+&quot;读操作完毕&quot;);
+    } finally {
+        rwl.readLock().unlock();
+    }
+}</code></pre><p>}<br>此时打印的结果为：</p>
+<p>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-1正在进行读操作<br>Thread-0正在进行读操作<br>Thread-0读操作完毕<br>Thread-1读操作完毕<br>说明thread1和thread2在同时进行读操作。这样就大大提升了读操作的效率。</p>
+<p>不过要注意的是：<br>如果有一个线程已经占用了读锁，则此时其他线程如果要申请写锁，则申请写锁的线程会一直等待释放读锁。<br>如果有一个线程已经占用了写锁，则此时其他线程如果申请写锁或者读锁，则申请的线程会一直等待释放写锁。</p>
+<p>关于ReentrantReadWriteLock类中的其他方法感兴趣的朋友可以自行查阅API文档。</p>
+<p>5.Lock和synchronized的选择<br>总结来说，Lock和synchronized有以下几点不同：<br>　　1）Lock是一个接口，而synchronized是Java中的关键字，synchronized是内置的语言实现；<br>　　2）synchronized在发生异常时，会自动释放线程占有的锁，因此不会导致死锁现象发生；而Lock在发生异常时，如果没有主动通过unLock()去释放锁，则很可能造成死锁现象，因此使用Lock时需要在finally块中释放锁；<br>　　3）Lock可以让等待锁的线程响应中断，而synchronized却不行，使用synchronized时，等待的线程会一直等待下去，不能够响应中断；<br>　　4）通过Lock可以知道有没有成功获取锁，而synchronized却无法办到。<br>　　5）Lock可以提高多个线程进行读操作的效率。</p>
+<p>在性能上来说，如果竞争资源不激烈，两者的性能是差不多的，而当竞争资源非常激烈时（即有大量线程同时竞争），此时Lock的性能要远远优于synchronized。所以说，在具体使用时要根据适当情况选择。</p>
+<p>锁的相关概念介绍<br>在前面介绍了Lock的基本使用，这一节来介绍一下与锁相关的几个概念。</p>
+<p>1.可重入锁<br>如果锁具备可重入性，则称作为可重入锁。像synchronized和ReentrantLock都是可重入锁，可重入性在我看来实际上表明了锁的分配机制：基于线程的分配，而不是基于方法调用的分配。举个简单的例子，当一个线程执行到某个synchronized方法时，比如说method1，而在method1中会调用另外一个synchronized方法method2，此时线程不必重新去申请锁，而是可以直接执行方法method2。</p>
+<p>看下面这段代码就明白了：</p>
+<p>class MyClass {<br>    public synchronized void method1() {<br>        method2();<br>    }</p>
+<pre><code>public synchronized void method2() {
+
+}</code></pre><p>}<br>上述代码中的两个方法method1和method2都用synchronized修饰了，假如某一时刻，线程A执行到了method1，此时线程A获取了这个对象的锁，而由于method2也是synchronized方法，假如synchronized不具备可重入性，此时线程A需要重新申请锁。但是这就会造成一个问题，因为线程A已经持有了该对象的锁，而又在申请获取该对象的锁，这样就会线程A一直等待永远不会获取到的锁。<br>　　<br>而由于synchronized和Lock都具备可重入性，所以不会发生上述现象。</p>
+<p>2.可中断锁<br>可中断锁：顾名思义，就是可以相应中断的锁。<br>在Java中，synchronized就不是可中断锁，而Lock是可中断锁。</p>
+<p>如果某一线程A正在执行锁中的代码，另一线程B正在等待获取该锁，可能由于等待时间过长，线程B不想等待了，想先处理其他事情，我们可以让它中断自己或者在别的线程中中断它，这种就是可中断锁。</p>
+<p>在前面演示lockInterruptibly()的用法时已经体现了Lock的可中断性。</p>
+<p>3.公平锁<br>公平锁即尽量以请求锁的顺序来获取锁。比如同是有多个线程在等待一个锁，当这个锁被释放时，等待时间最久的线程（最先请求的线程）会获得该所，这种就是公平锁。</p>
+<p>非公平锁即无法保证锁的获取是按照请求锁的顺序进行的。这样就可能导致某个或者一些线程永远获取不到锁。</p>
+<p>在Java中，synchronized就是非公平锁，它无法保证等待的线程获取锁的顺序。<br>而对于ReentrantLock和ReentrantReadWriteLock，它默认情况下是非公平锁，但是可以设置为公平锁。</p>
+<p>看一下这2个类的源代码就清楚了：</p>
+<p>在ReentrantLock中定义了2个静态内部类，一个是NotFairSync，一个是FairSync，分别用来实现非公平锁和公平锁。</p>
+<p>我们可以在创建ReentrantLock对象时，通过以下方式来设置锁的公平性：</p>
+<p>ReentrantLock lock = new ReentrantLock(true);</p>
+<p>如果参数为true表示为公平锁，为fasle为非公平锁。默认情况下，如果使用无参构造器，则是非公平锁。</p>
+<p>另外在ReentrantLock类中定义了很多方法，比如：<br>　　isFair() //判断锁是否是公平锁<br>　　isLocked() //判断锁是否被任何线程获取了<br>　　isHeldByCurrentThread() //判断锁是否被当前线程获取了<br>　　hasQueuedThreads() //判断是否有线程在等待该锁</p>
+<p>在ReentrantReadWriteLock中也有类似的方法，同样也可以设置为公平锁和非公平锁。不过要记住，ReentrantReadWriteLock并未实现Lock接口，它实现的是ReadWriteLock接口。</p>
+<p>4.读写锁<br>读写锁将对一个资源（比如文件）的访问分成了2个锁，一个读锁和一个写锁。<br>　　正因为有了读写锁，才使得多个线程之间的读操作不会发生冲突。<br>　　ReadWriteLock就是读写锁，它是一个接口，ReentrantReadWriteLock实现了这个接口。<br>　　可以通过readLock()获取读锁，通过writeLock()获取写锁。<br>　　上面已经演示过了读写锁的使用方法，在此不再赘述。</p>
+<p>作者：尼小摩<br>链接：<a href="https://www.jianshu.com/p/b1581c35c881" target="_blank" rel="noopener">https://www.jianshu.com/p/b1581c35c881</a><br>来源：简书<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>多线程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>restful 介绍</title>
+    <url>/2020/04/21/restful-%E4%BB%8B%E7%BB%8D/</url>
+    <content><![CDATA[<p>正文<br>介绍<br>自从Roy Fielding博士在2000年他的博士论文中提出REST（Representational State Transfer）风格的软件架构模式后，REST就基本上迅速取代了复杂而笨重的SOAP，成为Web API的标准了。</p>
+<h4 id="什么是Web-API呢？"><a href="#什么是Web-API呢？" class="headerlink" title="什么是Web API呢？"></a>什么是Web API呢？</h4><p>如果我们想要获取某个电商网站的某个商品，输入<a href="http://localhost:9999/products/123，就可以看到id为123的商品页面，但这个结果是HTML页面，它同时混合包含了Product的数据和Product的展示两个部分。对于用户来说，阅读起来没有问题，但是，如果机器读取，就很难从HTML中解析出Product的数据。" target="_blank" rel="noopener">http://localhost:9999/products/123，就可以看到id为123的商品页面，但这个结果是HTML页面，它同时混合包含了Product的数据和Product的展示两个部分。对于用户来说，阅读起来没有问题，但是，如果机器读取，就很难从HTML中解析出Product的数据。</a></p>
+<p>如果一个URL返回的不是HTML，而是机器能直接解析的数据，这个URL就可以看成是一个Web API。比如，读取<a href="http://localhost:9999/api/products/123，如果能直接返回Product的数据，那么机器就可以直接读取。" target="_blank" rel="noopener">http://localhost:9999/api/products/123，如果能直接返回Product的数据，那么机器就可以直接读取。</a></p>
+<p><strong>REST就是一种设计API的模式。最常用的数据格式是JSON</strong>。由于JSON能直接被JavaScript读取，所以，以JSON格式编写的REST风格的API具有<strong>简单、易读、易用</strong>的特点。</p>
+<p>编写API有什么好处呢？由于API就是把Web App的功能全部封装了，所以，通过API操作数据，可以极大地把前端和后端的代码隔离，使得后端代码易于测试，前端代码编写更简单。</p>
+<p>此外，如果我们把前端页面看作是一种用于展示的客户端，那么API就是为客户端提供数据、操作数据的接口。这种设计可以获得极高的扩展性。例如，当用户需要在手机上购买商品时，只需要开发针对iOS和Android的两个客户端，通过客户端访问API，就可以完成通过浏览器页面提供的功能，而后端代码基本无需改动。</p>
+<p>当一个Web应用以API的形式对外提供功能时，整个应用的结构就扩展为：</p>
+<p>[图片上传失败…(image-1e2b60-1546945534985)]</p>
+<p>把网页视为一种客户端，是REST架构可扩展的一个关键。</p>
+<p>Rest架构的主要原则<br>** 网络上的所有事物都被抽象为资源**</p>
+<p>** 每个资源都有一个唯一的资源标识符**</p>
+<p>** 同一个资源具有多种表现形式(xml,json等)**</p>
+<p>** 对资源的各种操作不会改变资源标识符**</p>
+<p>** 所有的操作都是无状态的**</p>
+<p>** 符合REST原则的架构方式即可称为RESTful**</p>
+<p>REST主要对以下两方面进行了规范</p>
+<p>-定位资源的URL风格，例如</p>
+<p><a href="http://bhusk.com/admin/1234" target="_blank" rel="noopener">http://bhusk.com/admin/1234</a></p>
+<p><a href="http://bhusk.com/admin/1234/10/11" target="_blank" rel="noopener">http://bhusk.com/admin/1234/10/11</a></p>
+<p>-如何对资源操作</p>
+<p>采用HTTP协议规定的<strong>GET、POST、PUT、DELETE</strong>动作处理资源的增删该查操作</p>
+<p>image</p>
+<h3 id="什么是Restful"><a href="#什么是Restful" class="headerlink" title="什么是Restful:"></a>什么是Restful:</h3><p>对应的中文是rest式的;Restful web service是一种常见的rest的应用,是遵守了rest风格的web服务;rest式的web服务是一种ROA(The Resource-Oriented Architecture)(面向资源的架构).</p>
+<p>符合REST约束风格和原则的应用程序或设计就是RESTful.</p>
+<p>/emp/1  HTTP GET      查询id=1的emp</p>
+<p>/emp/1  HTTP DELETE    删除id=1的emp,实验中直接删除会报405错误，但是采用$.ajax异步删除就没问题</p>
+<p>/emp/1  HTTP PUT    跟新emp</p>
+<p>/emp/add  HTTP POST     新增emp<br>Spring对RESTful的支持</p>
+<ul>
+<li><p>Spring MVC 对 RESTful应用提供了以下支持</p>
+</li>
+<li><p>利用@RequestMapping 指定要处理请求的URI模板和HTTP请求的动作类型</p>
+</li>
+<li><p>利用@PathVariable讲URI请求模板中的变量映射到处理方法参数上</p>
+</li>
+<li><p>利用Ajax,在客户端发出PUT、DELETE动作的请求</p>
+</li>
+</ul>
+<p> @RequestMapping(value = “/{id}”, method = RequestMethod.GET)<br> public String toUpdate(@PathVariable(“id”) Integer id, Model model) {}</p>
+<h4 id="RequestMapping的一般应用格式。"><a href="#RequestMapping的一般应用格式。" class="headerlink" title="RequestMapping的一般应用格式。"></a>RequestMapping的一般应用格式。</h4><p>@RequestMapping(value = “/{id}”, method = RequestMethod.GET)</p>
+<p>@RequestMapping(value = “/{id}”, method = RequestMethod.POST)</p>
+<p>@RequestMapping(value = “/{id}”, method = RequestMethod.DELETE)   // 因为这个需要Ajax请求，所有返回的是个json</p>
+<p>@ResponseBody<br>@RequestMapping(value = “/{id}”, method = RequestMethod.PUT)<br>客户端发送PUT，DELETE请求<br>** 可以采用Ajax方式发送PUT和DELETE请求**</p>
+<p>   $.ajax( {<br>           type : “DELETE”,<br>           url : “/spring_crud_restful/emp/deleteEmp/“ + id,<br>           dataType : “json”,<br>           success : function(data) {<br>               alert(data);<br>               location.href = “/spring_crud_restful/emp/listEmp/1”;<br>           }<br>      });<br>静态资源访问处理<br>采用RESTful架构后，需要将web.xml中控制器拦截的请求设置为/，这样会将css,js等静态资源进行拦截，发送404错误。</p>
+<p>解决方法：</p>
+<p><a href="mvc:resources/">mvc:resources/</a><br>&lt;mvc:resources mapping=”请求URI” location=”资源位置” /&gt;<br><a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br><a href="mvc:default-servlet-handler/">mvc:default-servlet-handler/</a><br>本篇文章参考了一部分 <a href="http://t.cn/RuZZUK3，http://t.cn/RKO0YPr" target="_blank" rel="noopener">http://t.cn/RuZZUK3，http://t.cn/RKO0YPr</a></p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>restful</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mock及使用</title>
+    <url>/2020/04/21/mock%E5%8F%8A%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<h4 id="mock-数据的好处"><a href="#mock-数据的好处" class="headerlink" title="mock 数据的好处"></a>mock 数据的好处</h4><h5 id="团队可以并行工作"><a href="#团队可以并行工作" class="headerlink" title="团队可以并行工作"></a>团队可以并行工作</h5><p>有了Mock，前后端人员只需要定义好接口文档就可以开始并行工作，互不影响，只在最后的联调阶段往来密切；后端与后端之间如果有接口耦合，也同样能被Mock解决；测试过程中如果遇到依赖接口没有准备好，同样可以借助Mock；不会出现一个团队等待另一个团队的情况。这样的话，开发自测阶段就可以及早开展，从而发现缺陷的时机也提前了，有利于整个产品质量以及进度的保证。</p>
+<h5 id="开启TDD模式，即测试驱动开发"><a href="#开启TDD模式，即测试驱动开发" class="headerlink" title="开启TDD模式，即测试驱动开发"></a>开启TDD模式，即测试驱动开发</h5><p>单元测试是TDD实现的基石，而TDD经常会碰到协同模块尚未开发完成的情况，但是有了mock，这些一切都不是问题。当接口定义好后，测试人员就可以创建一个Mock，把接口添加到自动化测试环境，提前创建测试。</p>
+<h6 id="可以模拟那些无法访问的资源"><a href="#可以模拟那些无法访问的资源" class="headerlink" title="可以模拟那些无法访问的资源"></a>可以模拟那些无法访问的资源</h6><p>比如说，你需要调用一个“墙”外的资源来方便自己调试，就可以自己Mock一个。</p>
+<h6 id="隔离系统"><a href="#隔离系统" class="headerlink" title="隔离系统"></a>隔离系统</h6><p>假如我们需要调用一个post请求，为了获得某个响应，来看当前系统是否能正确处理返回的“响应”，但是这个post请求会造成数据库中数据的污染，那么就可以充分利用Mock，构造一个虚拟的post请求，我们给他指定返回就好了</p>
+<p>可以用来演示<br>假如我们需要创建一个演示程序，并且做了简单的UI，那么在完全没有开发后端服务的情况下，也可以进行演示。说到演示了，假如你已经做好了一个系统，并且需要给客户进行演示，但是里面有些真实数据并不想让用户看到，那么同样，你可以用Mock接口把这些敏感信息接口全部替换。</p>
+<p>测试覆盖度</p>
+<p>Mock 一个对象<br>此处使用Mockito示例</p>
+<p>Mockito 是 GitHub 上使用最广泛的 Mock 框架,并与 JUnit 结合使用。Mockito 框架可以创建和配置 mock 对象。使用 Mockito 简化了具有外部依赖的类的测试开发。</p>
+<h6 id="一般使用-Mockito-的步骤"><a href="#一般使用-Mockito-的步骤" class="headerlink" title="一般使用 Mockito 的步骤:"></a>一般使用 Mockito 的步骤:</h6><p>模拟任何外部依赖并将这些模拟对象插入测试代码中<br>执行测试中的代码执行测试中的代码<br>验证代码是否按照预期执行验证代码是否按照预期执行<br>引入pom</p>
+<dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.14.3</version>
+        </dependency>
+新建测试类,构造了 list 这样的对象，并且给一个元素赋值 zuozewei。在最后断言的时候，也可以通过这个 list 里面确实有这个值。所以，通过这种方式，我们可以进行对象构造。可以是类，也可以是接口。 除了构造对象，当然也可以对方法设定的返回值指定异常。 上述代码的意思就是当调用 list 的第二个元素的时候，抛出一个运行异常。
+
+<p>public class SimpleTest {</p>
+<pre><code>@Test
+public void test(){
+    // 创建Mock对象，参数可以是类或者接口
+    List&lt;String&gt; list = mock(List.class);
+
+    //设置方法的预期返回值
+    when(list.get(0)).thenReturn(&quot;zuozewei&quot;);
+    when(list.get(1)).thenThrow(new RuntimeException(&quot;test exception&quot;));
+
+    String result = list.get(0);
+
+    //验证方法调用
+    verify(list).get(0);
+
+    //断言，list的第一个元素是否是&quot;zuozwei&quot;
+    Assert.assertEquals(result,&quot;zuozewei&quot;);
+
+}</code></pre><p>}<br>上面只是列举了 Mockito 的简单用法。对于比较复杂的用法，大家可以通过官网深入学习。因为 Mockito 主要用于单元测试，开发人员用的比较多，所以大家有兴趣可以自行了解。</p>
+<p>Mock Server<br>下图很好的解释了Mock Server 位置和作用：</p>
+<p>常见的Mock Server</p>
+<p>WireMock,支持HTTP协议，参考：<a href="http://wiremock.org/" target="_blank" rel="noopener">http://wiremock.org/</a><br>SoapUI MockService 支持WebService，参考：<a href="https://www.soapui.org/" target="_blank" rel="noopener">https://www.soapui.org/</a><br>Dubbo，需要自己实现<br>使用Web框架自己开发Mock Server系统，参考：<a href="http://www.testclass.net/interface/flask_mock/" target="_blank" rel="noopener">http://www.testclass.net/interface/flask_mock/</a><br>在线 Mock Server 系统，参考：<a href="http://easy-mock.com/login" target="_blank" rel="noopener">http://easy-mock.com/login</a><br>使用现成的 Mock Server 库创建系统，参考：<br> MockServer：<a href="https://github.com/jamesdbloom/mockserver" target="_blank" rel="noopener">https://github.com/jamesdbloom/mockserver</a><br>Moco：<a href="https://github.com/dreamhead/moco" target="_blank" rel="noopener">https://github.com/dreamhead/moco</a><br>两个项目都不错有Mock Server库，GitHub上面的 Star 也差不多。<br>小结<br>本文分场景介绍了两种 Mock 方式，对于Mock Server 的方案各有各的便利性，看起来都是对接口的模拟。</p>
+]]></content>
+      <categories>
+        <category>测试</category>
+      </categories>
+      <tags>
+        <tag>mock</tag>
       </tags>
   </entry>
 </search>
