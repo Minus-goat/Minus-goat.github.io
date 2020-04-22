@@ -459,4 +459,118 @@ public void test(){
         <tag>mock</tag>
       </tags>
   </entry>
+  <entry>
+    <title>hashmap遍历</title>
+    <url>/2020/04/22/hashmap%E9%81%8D%E5%8E%86/</url>
+    <content><![CDATA[<h4 id="1-使用-Iterator-遍历-HashMap-EntrySet"><a href="#1-使用-Iterator-遍历-HashMap-EntrySet" class="headerlink" title="1. 使用 Iterator 遍历 HashMap EntrySet"></a>1. 使用 Iterator 遍历 HashMap EntrySet</h4><p>package com.java.tutorials.iterations;  </p>
+<p>import java.util.HashMap;<br>import java.util.Iterator;<br>import java.util.Map;<br>import java.util.Map.Entry;  </p>
+<p>/**  </p>
+<ul>
+<li><p>在 Java 中遍历 HashMap 的5种最佳方法  </p>
+</li>
+<li><p>@author Ramesh Fadatare  </p>
+</li>
+<li></li>
+<li><p>/<br>public class IterateHashMapExample {<br>  public static void main(String[] args) {  </p>
+<pre><code>// 1. 使用 Iterator 遍历 HashMap EntrySet  
+Map &lt; Integer, String &gt; coursesMap = new HashMap &lt; Integer, String &gt; ();  
+coursesMap.put(1, &quot;C&quot;);  
+coursesMap.put(2, &quot;C++&quot;);  
+coursesMap.put(3, &quot;Java&quot;);  
+coursesMap.put(4, &quot;Spring Framework&quot;);  
+coursesMap.put(5, &quot;Hibernate ORM framework&quot;);  
+
+Iterator &lt; Entry &lt; Integer, String &gt;&gt; iterator = coursesMap.entrySet().iterator();  
+while (iterator.hasNext()) {  
+    Entry &lt; Integer, String &gt; entry = iterator.next();  
+    System.out.println(entry.getKey());  
+    System.out.println(entry.getValue());  
+}  </code></pre><p>  }<br>}<br>Output:</p>
+</li>
+</ul>
+<p>1<br>C<br>2<br>C++<br>3<br>Java<br>4<br>Spring Framework<br>5<br>Hibernate ORM framework</p>
+<h4 id="2-使用-Iterator-遍历-HashMap-KeySet"><a href="#2-使用-Iterator-遍历-HashMap-KeySet" class="headerlink" title="2. 使用 Iterator 遍历 HashMap KeySet"></a>2. 使用 Iterator 遍历 HashMap KeySet</h4><p>package com.java.tutorials.iterations;  </p>
+<p>import java.util.HashMap;<br>import java.util.Iterator;<br>import java.util.Map;  </p>
+<p>/**  </p>
+<ul>
+<li><p>在 Java 中遍历 HashMap 的5种最佳方法  </p>
+</li>
+<li><p>@author Ramesh Fadatare  </p>
+</li>
+<li></li>
+<li><p>/<br>public class IterateHashMapExample {<br>  public static void main(String[] args) {  </p>
+<pre><code>Map &lt; Integer, String &gt; coursesMap = new HashMap &lt; Integer, String &gt; ();  
+coursesMap.put(1, &quot;C&quot;);  
+coursesMap.put(2, &quot;C++&quot;);  
+coursesMap.put(3, &quot;Java&quot;);  
+coursesMap.put(4, &quot;Spring Framework&quot;);  
+coursesMap.put(5, &quot;Hibernate ORM framework&quot;);  
+
+// 2. 使用 Iterator 遍历 HashMap KeySet  
+Iterator &lt; Integer &gt; iterator = coursesMap.keySet().iterator();  
+while (iterator.hasNext()) {  
+    Integer key = iterator.next();  
+    System.out.println(key);  
+    System.out.println(coursesMap.get(key));  
+}  </code></pre><p>  }<br>}<br>Output:</p>
+</li>
+</ul>
+<p>1<br>C<br>2<br>C++<br>3<br>Java<br>4<br>Spring Framework<br>5<br>Hibernate ORM framework  </p>
+<h4 id="3-使用-For-each-循环遍历-HashMap"><a href="#3-使用-For-each-循环遍历-HashMap" class="headerlink" title="3. 使用 For-each 循环遍历 HashMap"></a>3. 使用 For-each 循环遍历 HashMap</h4><p>package com.java.tutorials.iterations;  </p>
+<p>import java.util.HashMap;<br>import java.util.Map;  </p>
+<p>/**  </p>
+<ul>
+<li><p>在 Java 中遍历 HashMap 的5种最佳方法  </p>
+</li>
+<li><p>@author Ramesh Fadatare  </p>
+</li>
+<li></li>
+<li><p>/<br>public class IterateHashMapExample {<br>  public static void main(String[] args) {  </p>
+<pre><code>Map &lt; Integer, String &gt; coursesMap = new HashMap &lt; Integer, String &gt; ();  
+coursesMap.put(1, &quot;C&quot;);  
+coursesMap.put(2, &quot;C++&quot;);  
+coursesMap.put(3, &quot;Java&quot;);  
+coursesMap.put(4, &quot;Spring Framework&quot;);  
+coursesMap.put(5, &quot;Hibernate ORM framework&quot;);  
+
+// 3. 使用 For-each 循环遍历 HashMap  
+for (Map.Entry &lt; Integer, String &gt; entry: coursesMap.entrySet()) {  
+    System.out.println(entry.getKey());  
+    System.out.println(entry.getValue());  
+}  </code></pre><p>  }<br>}<br>Output:</p>
+</li>
+</ul>
+<p>1<br>C<br>2<br>C++<br>3<br>Java<br>4<br>Spring Framework<br>5<br>Hibernate ORM framework<br>4. 使用 Lambda 表达式遍历 HashMap<br>package com.java.tutorials.iterations;  </p>
+<p>import java.util.HashMap;<br>import java.util.Map;  </p>
+<p>/**  </p>
+<ul>
+<li><p>在 Java 中遍历 HashMap 的5种最佳方法  </p>
+</li>
+<li><p>@author Ramesh Fadatare  </p>
+</li>
+<li></li>
+<li><p>/<br>public class IterateHashMapExample {<br>  public static void main(String[] args) {  </p>
+<pre><code>Map &lt; Integer, String &gt; coursesMap = new HashMap &lt; Integer, String &gt; ();  
+coursesMap.put(1, &quot;C&quot;);  
+coursesMap.put(2, &quot;C++&quot;);  
+coursesMap.put(3, &quot;Java&quot;);  
+coursesMap.put(4, &quot;Spring Framework&quot;);  
+coursesMap.put(5, &quot;Hibernate ORM framework&quot;);  
+
+// 4. 使用 Lambda 表达式遍历 HashMap  
+coursesMap.forEach((key, value) -&gt; {  
+    System.out.println(key);  
+    System.out.println(value);  
+});  </code></pre><p>  }<br>}<br>Output:</p>
+</li>
+</ul>
+<p>1<br>C<br>2<br>C++<br>3<br>Java<br>4<br>Spring Framework<br>5<br>Hibernate ORM framework</p>
+]]></content>
+      <categories>
+        <category>java</category>
+      </categories>
+      <tags>
+        <tag>hashmap</tag>
+      </tags>
+  </entry>
 </search>
