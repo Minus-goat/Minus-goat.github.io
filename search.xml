@@ -54,7 +54,36 @@
 <p>以上的总结就是什么是反射<br>反射就是把java类中的各种成分映射成一个个的Java对象<br>例如：一个类有：成员变量、方法、构造方法、包等等信息，利用反射技术可以对一个类进行解剖，把个个组成部分映射成一个个对象。<br>     （其实：一个类中这些成员方法、构造方法、在加入类中都有一个类来描述）<br>如图是类的正常加载过程：反射的原理在与class对象。<br>熟悉一下加载的时候：Class对象的由来是将class文件读入内存，并为之创建一个Class对象。</p>
 <p>其中这个Class对象很特殊。我们先了解一下这个Class类</p>
 <p>二、查看Class类在java中的api详解（1.7的API）<br>如何阅读java中的api详见java基础之——String字符串处理</p>
-<p>————————————————<br>版权声明：本文为CSDN博主「敬业的小码哥」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/sinat_38259539/java/article/details/71799078" target="_blank" rel="noopener">https://blog.csdn.net/sinat_38259539/java/article/details/71799078</a></p>
+<p>package fanshe;<br>/**</p>
+<ul>
+<li><p>获取Class对象的三种方式</p>
+</li>
+<li><p>1 Object ——&gt; getClass();</p>
+</li>
+<li><p>2 任何数据类型（包括基本数据类型）都有一个“静态”的class属性</p>
+</li>
+<li><p>3 通过Class类的静态方法：forName（String  className）(常用)</p>
+</li>
+<li></li>
+<li><p>/<br>public class Fanshe {<br>  public static void main(String[] args) {</p>
+<pre><code>//第一种方式获取Class对象  
+Student stu1 = new Student();//这一new 产生一个Student对象，一个Class对象。
+Class stuClass = stu1.getClass();//获取Class对象
+System.out.println(stuClass.getName());
+
+//第二种方式获取Class对象
+Class stuClass2 = Student.class;
+System.out.println(stuClass == stuClass2);//判断第一种方式获取的Class对象和第二种方式获取的是否是同一个
+
+//第三种方式获取Class对象
+try {
+    Class stuClass3 = Class.forName(&quot;fanshe.Student&quot;);//注意此字符串必须是真实路径，就是带包名的类路径，包名.类名
+    System.out.println(stuClass3 == stuClass2);//判断三种方式是否获取的是同一个Class对象
+} catch (ClassNotFoundException e) {
+    e.printStackTrace();
+}</code></pre><p>  }<br>}<br>————————————————<br>版权声明：本文为CSDN博主「敬业的小码哥」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/sinat_38259539/java/article/details/71799078" target="_blank" rel="noopener">https://blog.csdn.net/sinat_38259539/java/article/details/71799078</a><br>————————————————<br>版权声明：本文为CSDN博主「敬业的小码哥」的原创文章，遵循 CC 4.0 BY-SA 版权协议，转载请附上原文出处链接及本声明。<br>原文链接：<a href="https://blog.csdn.net/sinat_38259539/java/article/details/71799078" target="_blank" rel="noopener">https://blog.csdn.net/sinat_38259539/java/article/details/71799078</a></p>
+</li>
+</ul>
 ]]></content>
       <categories>
         <category>java</category>
