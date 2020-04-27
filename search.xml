@@ -622,4 +622,93 @@ git remote add upstream git@github.com:google/gson.git</code></pre><p>但如果�
         <tag>git</tag>
       </tags>
   </entry>
+  <entry>
+    <title>python 生成器及迭代器</title>
+    <url>/2020/04/27/python-%E7%94%9F%E6%88%90%E5%99%A8%E5%8F%8A%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
+    <content><![CDATA[<p>迭代器协议<br>什么是迭代器协议<br>对象需要提供next方法,它要么返回迭代中的下一项,要么就引起一个StopIteration异常,终止迭代.</p>
+<p>可迭代对象<br>实现了迭代器协议的对象就是可迭代对象(实现方式是,实现iter方法)</p>
+<p>协议<br>协议是一种规定,可迭代对象实现迭代器协议,Python的内置工具(如for,sum,min,max,in)就可以使用迭代器协议访问对象.例如文件之所以可以被for循环遍历,就是因为文件对象实现了迭代器协议,也就是说它有next()方法.</p>
+<p>迭代器<br>迭代器对象就是实现了iter() 和 next()方法的对象.其中iter()返回迭代器本身,而next()返回容器的下一个元素,在结尾处引发StopInteration异常.</p>
+<p>迭代器有两个方法:<br>iter() 和 next()</p>
+<p>it  = iter(iterable)  # 将一个可迭代对象转换为迭代器<br>next(it)  # 获取下一个迭代器中的下一个值</p>
+<p><code>注意</code><br>list dic tuple string 并不是迭代器,它们只是可迭代对象.但是可以通过iter(list)的方法<br>将它们转换为迭代器.<br>你可能会问，为什么list、dict、str等数据类型不是Iterator？</p>
+<p>这是因为Python的Iterator对象表示的是一个数据流，Iterator对象可以被next()函数调用并不断返回下一个数据，直到没有数据时抛出StopIteration错误。可以把这个数据流看做是一个有序序列，但我们却不能提前知道序列的长度，只能不断通过next()函数实现按需计算下一个数据，所以Iterator的计算是惰性的，只有在需要返回下一个数据时它才会计算。</p>
+<p>Iterator甚至可以表示一个无限大的数据流，例如全体自然数。而使用list是永远不可能存储全体自然数的。</p>
+<p>for x in [1,2,3,4,5]<br>pass</p>
+<p><code>完全等价于</code></p>
+<h1 id="首先获得Iterator对象"><a href="#首先获得Iterator对象" class="headerlink" title="首先获得Iterator对象:"></a>首先获得Iterator对象:</h1><p>it = iter([1, 2, 3, 4, 5])</p>
+<h1 id="循环"><a href="#循环" class="headerlink" title="循环:"></a>循环:</h1><p>while True:<br>    try:<br>        # 获得下一个值:<br>        x = next(it)<br>    except StopIteration:<br>        # 遇到StopIteration就退出循环<br>        break<br>自定义迭代器</p>
+<h1 id="encoding-utf-8"><a href="#encoding-utf-8" class="headerlink" title="encoding:utf-8"></a>encoding:utf-8</h1><p><strong>author</strong> = ‘Fioman’<br><strong>date</strong> = ‘2018/11/20 20:15’</p>
+<p>from itertools import islice<br>from collections import Iterator,Iterable</p>
+<h1 id="自定义一个迭代器-求斐波那契序列"><a href="#自定义一个迭代器-求斐波那契序列" class="headerlink" title="自定义一个迭代器,求斐波那契序列"></a>自定义一个迭代器,求斐波那契序列</h1><p>class Fib(object):<br>    def <strong>init</strong>(self):<br>        self.prev = 0<br>        self.curr = 1</p>
+<pre><code>def __iter__(self):
+    return self
+
+def __next__(self):
+    value = self.curr
+    self.curr += self.prev
+    self.prev = value
+    return value</code></pre><h1 id="迭代器对象"><a href="#迭代器对象" class="headerlink" title="迭代器对象"></a>迭代器对象</h1><p>f = Fib()<br>print(isinstance(f,Iterator)) # true<br>L = list(islice(f,0,10)) # islice对可迭代对象进行切片<br>print(L)</p>
+<h1 id="1-1-2-3-5-8-13-21-34-55"><a href="#1-1-2-3-5-8-13-21-34-55" class="headerlink" title="[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]"></a>[1, 1, 2, 3, 5, 8, 13, 21, 34, 55]</h1><p>class Container:<br>    def <strong>init</strong>(self, start, end):<br>        self.start = start<br>        self.end = end</p>
+<pre><code>def __iter__(self):
+    print(&quot;调用了 __iter__(self) 方法&quot;)
+    return self  # 返回迭代器对象本身
+
+def __next__(self):
+
+    if self.start &lt; self.end:
+        i = self.start
+        self.start = self.start + 1
+        return i
+    else:
+        raise StopIteration</code></pre><p>Cont = iter(Container(0, 10))</p>
+<p>for i in Cont:<br>    print(i)</p>
+<p>总结</p>
+<p>所有的iterable都可以通过内置函数iter()转换为iterator<br>迭代器的优点:省内存.它是一种通过延时创建的方式生成一个序列,只有在需要的时候才被创建.<br>迭代器对象从集合的第一个元素开始访问,直到所有的元素被访问结束,只能往前不能后退<br>迭代器有两个基本的方法:iter,text方法<br>内置函数iter(),next(),本质上都是用的对象的iter()和next()方法.<br>生成器<br>Python使用生成器对延迟操作提供了支持.所谓延迟操作,是指在需要的时候才产生结果,而不是立即产生结果.<br>这也是生成器的主要好处.</p>
+<p>通过列表生成式，我们可以直接创建一个列表。但是，受到内存限制，列表容量肯定是有限的。而且，创建一个包含100万个元素的列表，不仅占用很大的存储空间，如果我们仅仅需要访问前面几个元素，那后面绝大多数元素占用的空间都白白浪费了。</p>
+<p>所以，如果列表元素可以按照某种算法推算出来，那我们是否可以在循环的过程中不断推算出后续的元素呢？这样就不必创建完整的list，从而节省大量的空间。在Python中，这种一边循环一边计算的机制，称为生成器（Generator）。</p>
+<p>要创建一个generator，有很多种方法。第一种方法很简单，只要把一个列表生成式的[]改成()，就创建了一个generator</p>
+<p>创建L和g的区别仅在于最外层的[]和()，L是一个list，而g是一个generator。<br>我们可以直接打印出list的每一个元素，但我们怎么打印出generator的每一个元素呢？<br>如果要一个一个打印出来，可以通过generator的next()方法:</p>
+<p>Python有两种不同的方式提供生成器:<br>生成器表达式<br>类似于列表推导式,是用()代替了原来的[].生成器返回按需产生结果的一个对象,而不是一次构建一个结果列表</p>
+<p>生成器函数<br>和常规函数定义一样,但是返回语句return被yield语句代替了.yield语句一次返回一个结果,在每个结果中间,挂起函数的状态,以便下次从它离开的地方继续执行.</p>
+<p>使用生成器返回自然数的平方<br>def gensquares(N):<br>    for i in range(N):<br>        yield i ** 2</p>
+<p>for item in gensquares(5):<br>    print(item)<br>使用普通的函数</p>
+<h1 id="使用普通的函数"><a href="#使用普通的函数" class="headerlink" title="使用普通的函数"></a>使用普通的函数</h1><p>def squares_list(N):<br>    ret = []<br>    for i in range(N):<br>        ret.append(i * i)<br>    return ret</p>
+<p>for item in squares_list(5):<br>    print(item)<br>再看生成器</p>
+<ol>
+<li>语法上和普通的函数非常相似,都是用def进行定义.唯一的不同是普通的函数是用return返回,而生成器是通过yield语句返回一个值</li>
+<li>自动实现迭代器协议:对于生成器,Python会自动实现它的可迭代协议,以便用在可以迭代的地方.所以我们可调用它的next方法,获取下一个元素,并且在没有值可以返回的时候,生成器会自动产生StopIteration异常</li>
+<li>状态挂起:生成器使用yield语句返回一值.yield语句挂起该生成器函数的状态,保留足够的信息,以便之后从它离开的地方继续执行.</li>
+</ol>
+<p>示例<br>首先,生成器的好处是延时计算,一次返回一个结果.也就是所它不会一次返回所有的结果,可以节省内存.</p>
+<p>sum([i for i in range(1000000000)])<br>sum((i for i in range(1000000000)))<br>注意:使用生成器的注意事项</p>
+<p>列表生成器,迭代器和生成器的区别?<br>列表生成器<br>现在有个需求,看列表[1,2,3,4,5,6,7,8,9],要求你把列表里面的每个值都加1,你怎么实现呢?</p>
+<p>方法1: 简单,循环遍历,然后用另外一个列表来实现</p>
+<h1 id="encoding-utf-8-1"><a href="#encoding-utf-8-1" class="headerlink" title="encoding:utf-8"></a>encoding:utf-8</h1><p><strong>author</strong> = ‘Fioman’<br><strong>date</strong> = ‘2018/12/6 11:26’</p>
+<h1 id="现在有一个需求-1-2-3-4-5-6-要求你将里面的数每个数都加1-你怎么办"><a href="#现在有一个需求-1-2-3-4-5-6-要求你将里面的数每个数都加1-你怎么办" class="headerlink" title="现在有一个需求,[1,2,3,4,5,6],要求你将里面的数每个数都加1,你怎么办?"></a>现在有一个需求,[1,2,3,4,5,6],要求你将里面的数每个数都加1,你怎么办?</h1><h1 id="方法1-遍历-然后添加"><a href="#方法1-遍历-然后添加" class="headerlink" title="方法1: 遍历,然后添加"></a>方法1: 遍历,然后添加</h1><p>def func1(num_list):<br>    # # 使用append<br>    # b = []<br>    # for i in num_list:<br>    #     b.append(num_list[i])<br>    for index, i in enumerate(num_list):<br>        num_list[i] += 1</p>
+<pre><code>print(num_list)</code></pre><h1 id="方法2-使用map-匿名函数-map的作用-就是前面的参数是一个函数-然后是一个可迭代对象"><a href="#方法2-使用map-匿名函数-map的作用-就是前面的参数是一个函数-然后是一个可迭代对象" class="headerlink" title="方法2: 使用map,匿名函数.map的作用,就是前面的参数是一个函数,然后是一个可迭代对象"></a>方法2: 使用map,匿名函数.map的作用,就是前面的参数是一个函数,然后是一个可迭代对象</h1><h1 id="将可迭代对象逐个的带入到前面的函数中-返回一个列表"><a href="#将可迭代对象逐个的带入到前面的函数中-返回一个列表" class="headerlink" title="将可迭代对象逐个的带入到前面的函数中,返回一个列表"></a>将可迭代对象逐个的带入到前面的函数中,返回一个列表</h1><p>def func2(num_list):<br>    a = map(lambda x:x+1,num_list)<br>    print(a)</p>
+<h1 id="方法3-高级-直接使用列表推导式"><a href="#方法3-高级-直接使用列表推导式" class="headerlink" title="方法3: 高级,直接使用列表推导式"></a>方法3: 高级,直接使用列表推导式</h1><p>def func3(num_list):<br>    a = [x+1 for x in num_list]  # 列表推导式,前面是一个表达式,表示结果,后面跟一个for加一个可迭代的对象,再后面还可以跟<br>    # 一个if else 语句进行判断<br>    print(a)</p>
+<p>if <strong>name</strong> == ‘<strong>main</strong>‘:<br>    num_list = [1, 2, 3, 4, 5, 6]<br>    func1(num_list)</p>
+<p>生成器<br>什么是生成器</p>
+<p>通过列表推导式,我们可以直接创建一个列表,但是如果这个列表的长度很大,就很占用内存,比如我们想要创建一个100万个元素的列表,就会占用很大的内存空间.</p>
+<p>如果列表元素可以按照某种算法推算出来,我们可不可以在一边循环的过程中不断的推算出后续的元素呢?这样就不需要一次性分配出一个list所需要的全部的内存空间,答案是肯定的,在Python中我们通过生成器的机制,可以实现一边循环一边分配空间.</p>
+<p>生成器是迭代器的一种,Python中有两种方法来实现生成器,一个是生成器表达式,一个是生成器函数.</p>
+<p>生成器表达式:<br>将列表推导式的[] 换成圆括号就是生成器表达式.</p>
+<p>sum([i for i in range(1000000000)])<br>sum((i for i in range(1000000000)))<br>生成器函数,带yield的函数</p>
+<p>生成器是一个特殊的函数,可以被用作控制循环的迭代行为,python中生成器是迭代器的一种,使用yield代替return返回,每次调用yield会暂停,而可以使用next()函数和send()函数恢复生成器.</p>
+<p>生成器类似于返回值为一个数组的一个函数,这个函数可以接收参数,可以被调用,但是不同于一般的函数会一次性返回包括了所有数值的数组,生成器一次只能产生一个值,这样消耗的内存数量将大大减小,生成器可以被看作是一个函数,但是它本质上也算是一个迭代器.</p>
+<p>小结</p>
+<p>凡是可以用作for循环的对象都是可迭代对象,都遵循了可迭代协议<br>凡是可以用next()取出下一个元素,使用iter()返回自身的的迭代器类型<br>可迭代数据类型如list,dict,str等都是Iteralbe但不是迭代器Iterator,不过可以通过iter(list)函数获取一个迭代器对象<br>对于yield的总结<br>通常的for … in ..循环中,后面的是一个列表或者是字典,或者是字符串.它的缺点是很明显的,就是在迭代的时候一下就分配了全部的内存,这样数据比较大,将会占用很大的内存.</p>
+<p>生成器是可以迭代的,但是只可以读取它一次,因为用的时候才生成.生成器表达式和列表推导式的区别就是生成器表达式使用小括号而列表推导式使用[]</p>
+<p>生成器(generator)能够迭代的关键是他有next()方法,工作原理是通过重复调用next()方法,直到捕获一个StopIteration异常</p>
+<p>带有yield的函数不再是一个普通的函数,而是一个生成器函数.可以用于迭代</p>
+<p>yield就是return返回的一个值,并且记住这个返回的位置.下一次迭代就从整个位置开始</p>
+]]></content>
+      <categories>
+        <category>python</category>
+      </categories>
+      <tags>
+        <tag>生成器及迭代器</tag>
+      </tags>
+  </entry>
 </search>

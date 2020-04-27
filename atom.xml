@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://yoursite.com/"/>
-  <updated>2020-04-27T02:44:06.105Z</updated>
+  <updated>2020-04-27T02:49:29.654Z</updated>
   <id>http://yoursite.com/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>python 生成器及迭代器</title>
+    <link href="http://yoursite.com/2020/04/27/python-%E7%94%9F%E6%88%90%E5%99%A8%E5%8F%8A%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
+    <id>http://yoursite.com/2020/04/27/python-%E7%94%9F%E6%88%90%E5%99%A8%E5%8F%8A%E8%BF%AD%E4%BB%A3%E5%99%A8/</id>
+    <published>2020-04-27T02:48:01.000Z</published>
+    <updated>2020-04-27T02:49:29.654Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;迭代器协议&lt;br&gt;什么是迭代器协议&lt;br&gt;对象需要提供next方法,它要么返回迭代中的下一项,要么就引起一个StopIteration异常,终止迭代.&lt;/p&gt;
+&lt;p&gt;可迭代对象&lt;br&gt;实现了迭代器协议的对象就是可迭代对象(实现方式是,实现iter方法)&lt;/p&gt;
+&lt;p&gt;协议&lt;
+        
+      
+    
+    </summary>
+    
+    
+      <category term="python" scheme="http://yoursite.com/categories/python/"/>
+    
+    
+      <category term="生成器及迭代器" scheme="http://yoursite.com/tags/%E7%94%9F%E6%88%90%E5%99%A8%E5%8F%8A%E8%BF%AD%E4%BB%A3%E5%99%A8/"/>
+    
+  </entry>
   
   <entry>
     <title>git repo创建修改及分支merge</title>
