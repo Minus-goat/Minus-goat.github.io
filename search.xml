@@ -573,4 +573,53 @@ coursesMap.forEach((key, value) -&gt; {
         <tag>hashmap</tag>
       </tags>
   </entry>
+  <entry>
+    <title>git repo创建修改及分支merge</title>
+    <url>/2020/04/27/git-repo%E5%88%9B%E5%BB%BA%E4%BF%AE%E6%94%B9%E5%8F%8A%E5%88%86%E6%94%AFmerge/</url>
+    <content><![CDATA[<h4 id="创建项目："><a href="#创建项目：" class="headerlink" title="创建项目："></a>创建项目：</h4><p>(1)mkdir最好在原项目上fork一个git repo</p>
+<p>(2)cd the dir–&gt;git clone git@… or ssh@….</p>
+<p>(3)git checkout new branch</p>
+<h4 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h4><p>在Git的使用场景中，如果一个项目关联到两个远程repo(仓库)，通常这两个repo一个是<strong>源项目（upstream）</strong>，一个是fork到<strong>自己空间下的该项目</strong>(origin)。这种情况下，一般是用git remote add origin [repo地址]和git remote add upstream [repo地址]，如：</p>
+<pre><code>git remote add origin git@github.com:drubear/echarts.git
+
+git remote add upstream git@github.com:google/gson.git</code></pre><p>但如果遇到repo主机的ip发生变化、repo迁移等情况，需要修改origin中指向的地址，可以使用如下几种方法。<br>在开始前，先使用</p>
+<pre><code>git remote -v</code></pre><p>命令，查看一下现在origin指向的url地址。</p>
+<h5 id="方法1：用git-remote-set-url命令-修改origin中url的指向"><a href="#方法1：用git-remote-set-url命令-修改origin中url的指向" class="headerlink" title="方法1：用git remote set-url命令 修改origin中url的指向"></a>方法1：用git remote set-url命令 修改origin中url的指向</h5><pre><code>git remote set-url origin &lt;新的git repo地址&gt;</code></pre><p>如</p>
+<pre><code>git remote set-url origin git@github.com:google/gson.git</code></pre><p>最后，使用</p>
+<pre><code>git remote -v</code></pre><p>查一下origin是否已经被修改到了期望的地址。</p>
+<h5 id="方法2：修改git的config文件"><a href="#方法2：修改git的config文件" class="headerlink" title="方法2：修改git的config文件"></a>方法2：修改git的config文件</h5><p>方法2在原理上与方法1相同。<br>显示隐藏文件，找到项目根目录下的.git文件夹。<br>再找到其中的config文件（建议先做备份）。<br>然后修改其中的url字段，如下：</p>
+<pre><code>[remote &quot;origin&quot;]
+    url = [改为你期望的git地址]</code></pre><p>然后，使用</p>
+<pre><code>git remote -v</code></pre><p>查一下origin是否已经被修改到了期望的地址。</p>
+<h5 id="方法3：先删掉origin，再重新添加"><a href="#方法3：先删掉origin，再重新添加" class="headerlink" title="方法3：先删掉origin，再重新添加"></a>方法3：先删掉origin，再重新添加</h5><p>使用<strong>rm命令删除</strong>origin。</p>
+<pre><code>git remote rm origin</code></pre><p>然后使用add命令重新添加</p>
+<pre><code>git remote add origin git@github.com:google/gson.git</code></pre><p>最后，使用</p>
+<pre><code>git remote -v</code></pre><h4 id="合并分支："><a href="#合并分支：" class="headerlink" title="合并分支："></a>合并分支：</h4><pre><code>1.创建本地分支并切换到此分支（此时远程分支上没有此分支）
+    git checkout -b rmi-test
+
+2.将此分支提交到远程分支
+    git push origin rmi-test
+
+3.修改本地文件并提交此远程分支上去（此时远程master分支并没有修改）
+    git add .（分支修改内容）
+    git commit -m &quot;分支修改内容&quot;
+    git push -u origin rmi-test （推送到此远程分支上）
+
+4.切换到本地master分支并合并新建分支修改的内容
+    git checkout master
+    git merge rmi-test （合并）
+    git push -u origin master （推送到master远程分支）
+
+5.删除本地分支和远程分支
+    git push origin --delete (远程分支名字)
+
+    git branch -d （本地分支名字）</code></pre><p>————————————————</p>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
 </search>
